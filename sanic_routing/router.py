@@ -18,7 +18,7 @@ from .exceptions import (
 from .line import Line
 from .patterns import REGEX_TYPES
 from .route import Route
-from .tree import Tree
+from .tree import Tree, Node
 from .utils import parts_to_path, path_to_parts
 
 # The below functions might be called by the compiled source code, and
@@ -416,6 +416,11 @@ class BaseRouter(ABC):
             route_container = (
                 "regex_routes" if group.regex else "dynamic_routes"
             )
+            route_idx = 0
+
+            if len(group.routes) > 1:
+                route_idx = "route_idx"
+                Node._inject_method_check(src, 1, group)
 
             src.extend(
                 [
